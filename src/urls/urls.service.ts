@@ -1,5 +1,5 @@
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 export interface UrlData {
   originalUrl: string;
@@ -11,6 +11,16 @@ export interface UrlData {
 export class UrlsService {
   private urls: UrlData[] = [];
 
+    findByCode(shortCode: string): UrlData{
+         const url = this.urls.find(
+            (item) => item.shortCode === shortCode
+         );
+
+         if(!url){
+            throw new NotFoundException('URL not found');
+         }
+          return url;
+    }
   shortenUrl(originalUrl: string): UrlData {
     const shortCode = Math.random()
       .toString(36)
